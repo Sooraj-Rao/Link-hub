@@ -16,7 +16,7 @@ const Login = () => {
 
     const { error, message, data } = await Register({ email, password });
     if (error) {
-      return console.log(error);
+      return console.log(message);
     }
     console.log(message);
     console.log(data);

@@ -1,14 +1,41 @@
+"use client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import axios from "axios";
 import Link from "next/link";
-import React from "react";
+import { redirect, useRouter } from "next/navigation";
+import React, { useRef } from "react";
 
 const Login = () => {
+  const mailRef = useRef();
+  const passwordRef = useRef();
+  const router = useRouter()
+
+  const handleSubmit = async (e: { preventDefault: () => void }) => {
+    e.preventDefault();
+    const email = mailRef?.current?.value;
+    const password = passwordRef?.current?.value;
+    try {
+      const res = await axios.post("/api/login", { email, password });
+      const { error, message } = res.data;
+      if(error){
+        console.log(message);
+      }else{
+        router.push('/create')
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div>
       <section className="">
         <div className="container flex items-center justify-center min-h-[calc(100vh-100px)]  px-6 mx-auto">
-          <form className="w-full max-w-md text-center dark:shadow-none border shadow-[7px_7px_20px_-4px] rounded-xl p-6 shadow-black">
+          <form
+            onSubmit={handleSubmit}
+            className="w-full max-w-md text-center dark:shadow-none border shadow-[7px_7px_20px_-4px] rounded-xl p-6 shadow-black"
+          >
             <h1 className="mt-3 text-2xl font-semibold text-gray-800 text-center capitalize sm:text-3xl dark:text-white">
               Login
             </h1>
@@ -19,6 +46,7 @@ const Login = () => {
               <span className="absolute"></span>
 
               <Input
+                ref={mailRef}
                 type="email"
                 placeholder="Email"
                 className="w-80 border-slate-400 dark:border-slate-700"
@@ -29,6 +57,7 @@ const Login = () => {
               <span className="absolute"></span>
 
               <Input
+                ref={passwordRef}
                 type="password"
                 placeholder="Password"
                 className="w-80 border-slate-400 dark:border-slate-700"

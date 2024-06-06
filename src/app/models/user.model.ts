@@ -1,22 +1,19 @@
 import mongoose, { Schema } from "mongoose";
 
-const linkSchema = new Schema({
+
+const treeSchema = new Schema({
   title: {
     type: String,
     required: true,
   },
-  url: {
+  description: {
     type: String,
     required: true,
   },
-});
-
-const treeSchema = new Schema({
-  name: {
+  link: {
     type: String,
     required: true,
   },
-  links: [linkSchema],
 });
 
 const userSchema = new Schema(
@@ -25,15 +22,20 @@ const userSchema = new Schema(
       type: String,
       required: true,
     },
+    email: {
+      type: String,
+      required: true,
+    },
     password: {
       type: String,
       required: true,
     },
     linktree: [treeSchema],
+    sublinktree:[treeSchema]
   },
   { timestamps: true }
 );
 
-const User = mongoose.models.users || mongoose.model("User", userSchema);
+const User = mongoose.models.Users || mongoose.model("Users", userSchema);
 
 export default User;
