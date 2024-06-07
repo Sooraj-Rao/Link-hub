@@ -6,18 +6,16 @@ import { t_InputData } from "@/components/widgets/create/addDialog";
 import { ValidateUser } from "../util/validateUser";
 import Links from "@/app/models/link.model";
 
-export default async function createLinkHandler(
+export default async function UpdateLinkHandler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
   try {
     await ConnectDb();
 
-    const { link, title, description, lock }: t_InputData = req.body;
-    if (!link || !title || !description) {
-      return res
-        .status(400)
-        .json({ error: true, message: "All fields mandatory" });
+    const { linkId }: { linkId: string } = req.body;
+    if (!linkId) {
+      return res.status(400).json({ error: true, message: "Failed to delete" });
     }
 
     const cookies = cookie.parse(req.headers.cookie || "");
@@ -28,7 +26,7 @@ export default async function createLinkHandler(
       return res.status(401).json({ error: true, message });
     }
     if (bad) {
-      return res.status(401).json({
+      return res.json({
         error: true,
         message: "UnAuthorized..Please login",
         bad: true,
@@ -36,29 +34,29 @@ export default async function createLinkHandler(
     }
 
     const { id } = data;
-    const newLink = { link, title, description, lock };
 
-    console.log(newLink);
-
-    const addNewLink = await Links.create(newLink);
-    const newLinkId = { linkData: addNewLink?._id };
+    const DeleteLink = await Links.findByIdAndDelete(linkId);
+    if (!DeleteLink) {
+      return res.status(500).json({
+        message: "Failed to Delete",
+        error: true,
+      });
+    }
     const updatedUser = await User.findByIdAndUpdate(
       id,
-      { $push: { linktree: newLinkId } },
+      { $pull: { linktree: { linkData: linkId } } },
       { new: true }
     );
 
     if (updatedUser) {
       return res.status(200).json({
-        message: "success",
+        message: "Succesfully Deleted",
         error: false,
-        data: updatedUser,
       });
     } else {
       return res.status(500).json({
-        message: "failed to update",
+        message: "Failed to Delete",
         error: true,
-        data: null,
       });
     }
   } catch (error) {

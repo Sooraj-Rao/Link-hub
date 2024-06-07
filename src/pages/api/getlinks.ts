@@ -4,8 +4,12 @@ import User from "../../app/models/user.model";
 import cookie from "cookie";
 import { t_InputData } from "@/components/widgets/create/addDialog";
 import { ValidateUser } from "../util/validateUser";
+import Links from "@/app/models/link.model";
 
-export default async function getLinks(req: NextApiRequest, res: NextApiResponse) {
+export default async function getLinks(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
   try {
     await ConnectDb();
 
@@ -26,11 +30,22 @@ export default async function getLinks(req: NextApiRequest, res: NextApiResponse
 
     const { id } = data;
 
-    const linkData = await User.findById(id);
+    const UserData = await User.findById(id);
 
-    return res.json({ error: false, message: "success", linkData });
+    const Result = await Promise.all(
+      UserData.linktree.map(async (item) => {
+        const populatedItem = await User.populate(item, {
+          path: "linkData",
+          model: Links,
+        });
+        return populatedItem;
+      })
+    );
+    console.log(Result);
+
+    return res.json({ error: false, message: "success", links: Result });
   } catch (error) {
     console.log(error);
-    return res.json({ error: true, message: "Login failed" });
+    return res.json({ error: true, message: "Failed to get links" });
   }
 }

@@ -74,3 +74,38 @@
       @apply bg-background text-foreground;
     }
   }
+
+  
+.Loader {
+  animation: Loader 2s infinite linear;
+  background: linear-gradient(to left, #bcbfc1 4%, #919090 25%, #bcbfc1 36%);
+  background-size: 1000px 100%;
+}
+
+@keyframes Loader {
+  0% {
+      background-position: -1000px 0;
+  }
+
+  100% {
+      background-position: 1000px 0;
+  }
+}
+
+
+.DarkLoader {
+  animation: DarkLoader 4s infinite linear;
+  /* background: linear-gradient(to left, rgb(36, 46, 54) 4%, #3d4149 25%, rgb(36, 46, 54) 36%); */
+  background: linear-gradient(to left, grey,rgb(1, 8, 38),grey);
+  background-size: 1000px 100%;
+}
+
+@keyframes DarkLoader {
+  0% {
+      background-position: -1000px 0;
+  }
+
+  100% {
+      background-position: 1000px 0;
+  }
+}

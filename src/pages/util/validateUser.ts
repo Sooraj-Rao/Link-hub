@@ -24,6 +24,10 @@ export const ValidateUser = async (cookies) => {
   } catch (error) {
     console.log(error);
 
-    return { error: true, token: false, message: "Invalid token" };
+    return {
+      error: true,
+      token: false,
+      message: "Session Expired.Please Re-login",
+    };
   }
 };

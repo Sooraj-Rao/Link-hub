@@ -1,4 +1,5 @@
 "use client";
+import { TooltipWrap } from "@/helpers/TooltipParent";
 import {
   Bolt,
   Boxes,
@@ -22,17 +23,19 @@ const SideBar = (props) => {
     { title: "Report issue", icon: <Bug /> },
   ];
   return (
-   <>
-      <button
-        onClick={() => setsideBarClose(!sideBarClose)}
-        className="group-hover:scale-100 scale-0 duration-300 absolute -right-2 top-0 bg-white  hover:text-blue-500  text-black rounded-full"
-      >
-        {sideBarClose ? (
-          <ChevronRight className=" h-6 w-6" />
-        ) : (
-          <ChevronLeft className=" h-6 w-6" />
-        )}
-      </button>
+    <>
+      <TooltipWrap text={!sideBarClose ? "Minimize" : "Maximize"}>
+        <button
+          onClick={() => setsideBarClose(!sideBarClose)}
+          className="group-hover:scale-100 scale-0 duration-300 absolute -right-2 top-0 bg-white  hover:text-blue-500  text-black rounded-full"
+        >
+          {sideBarClose ? (
+            <ChevronRight className=" h-6 w-6" />
+          ) : (
+            <ChevronLeft className=" h-6 w-6" />
+          )}
+        </button>
+      </TooltipWrap>
       <ul className=" w-full p-3  overflow-hidden ">
         {routes.map((item, i) => {
           return (

@@ -1,21 +1,5 @@
 import mongoose, { Schema } from "mongoose";
 
-
-const treeSchema = new Schema({
-  title: {
-    type: String,
-    required: true,
-  },
-  description: {
-    type: String,
-    required: true,
-  },
-  link: {
-    type: String,
-    required: true,
-  },
-});
-
 const userSchema = new Schema(
   {
     name: {
@@ -30,8 +14,8 @@ const userSchema = new Schema(
       type: String,
       required: true,
     },
-    linktree: [treeSchema],
-    sublinktree:[treeSchema]
+    linktree: [{ linkData: { type: Schema.Types.ObjectId, ref: "links" } }],
+    sublinktree: [{ linkData: { type: Schema.Types.ObjectId, ref: "links" } }],
   },
   { timestamps: true }
 );
