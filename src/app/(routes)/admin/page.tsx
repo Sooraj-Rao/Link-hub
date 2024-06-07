@@ -1,6 +1,6 @@
 "use client";
 import SideBar from "@/components/widgets/create/sidebar";
-import CreateTree from "@/components/widgets/create/createTree";
+import {CreateTree} from "@/components/widgets/create/createTree";
 import React, { useState } from "react";
 
 const CreatePage = () => {

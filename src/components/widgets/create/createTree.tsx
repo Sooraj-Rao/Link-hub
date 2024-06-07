@@ -9,19 +9,25 @@ import DeleteDialog from "@/components/tools/ValidateDelete";
 
 import { TooltipWrap } from "@/helpers/TooltipParent";
 import LockDialog from "@/components/tools/LockDialog";
+import { useZustandStore } from "@/zustand/store";
 
-const CreateTree = () => {
+export const CreateTree = () => {
   const [AddDialogShow, setAddDialogShow] = useState(false);
   const [linkData, setLinkData] = useState([]);
   const [loader, setloader] = useState(true);
   const [DeleteModalShow, setDeleteModalShow] = useState("");
   const [Drawer, setDrawer] = useState("");
+  const { userData, setUserData } = useZustandStore();
+
+  const linktreeURL =
+    process.env.NEXT_PUBLIC_SITE_URL + "/" + userData?.userName;
 
   const fetchLinks = async () => {
     try {
       const res = await axios.get("/api/getlinks");
       const { error, message, links } = res.data;
-      const onlyLinks = links?.map((item, i) => {
+      setUserData(links?.UserData);
+      const onlyLinks = links?.Result?.map((item, i) => {
         return item?.linkData;
       });
 
@@ -58,28 +64,45 @@ const CreateTree = () => {
     setDeleteModalShow,
   };
 
-
   return (
-    <div className=" flex justify-between">
+    <div className=" flex justify-between ">
       {DeleteModalShow && <DeleteDialog {...DeleteDialogProps} />}
-      <div>
-        <div className=" bg-slate-900 rounded-md py-5 flex justify-between gap-x-14 items-center px-10">
-          <h1>
-            Your Linktree is live:
-            <a
-              href="https://linktr.ee/SoorajRao"
-              className=" underline text-blue-500 ml-1 cursor-pointer"
-            >
-              https://linktr.ee/SoorajRao
-            </a>
-          </h1>
-          <Button>Copy Linktree URL</Button>
+      <div className=" min-w-[60%]">
+        <div
+          className={`${userData ? "" : " rounded-md DarkLoader h-20 w-full"}`}
+        >
+          <div
+            className={` ${
+              userData ? "block" : "hidden"
+            } bg-slate-900 rounded-md py-5 flex justify-between gap-x-14 items-center px-10`}
+          >
+            <h1>
+              Your Linktree is live:
+              <a
+                target="_blank"
+                href={linktreeURL}
+                className=" underline text-blue-500 ml-1 cursor-pointer"
+              >
+                {linktreeURL}
+              </a>
+            </h1>
+            <Button>Copy Linktree URL</Button>
+          </div>
         </div>
-        <div className=" mt-10 flex justify-between items-center">
-          <AddDialog {...DialogProps} />
-          <Button>
-            Create custom tree <Stars className=" h-4 ml-1" />
-          </Button>
+        <div className=" mt-10 flex justify-between items-center ">
+          {!userData ? (
+            <>
+              <h1 className=" h-10 w-32 DarkLoader rounded-md"></h1>
+              <h1 className=" h-10 w-32 DarkLoader rounded-md"></h1 >
+            </>
+          ) : (
+            <>
+              <AddDialog {...DialogProps} />
+              <Button>
+                Create custom tree <Stars className=" h-4 ml-1" />
+              </Button>
+            </>
+          )}
         </div>
 
         <div className=" mt-10">
@@ -115,10 +138,9 @@ const CreateTree = () => {
           ) : linkData?.length != 0 ? (
             linkData?.map((item, i) => {
               const { link, title, descriptionm, _id, lock } = item;
-              console.log(item);
 
               return (
-                <div key={i} className="my-2">
+                <div key={i} className="my-2 w-full">
                   <div className=" w-full bg-slate-900  p-4 rounded-md">
                     <h1 className=" my-1 text-xl font-semibold">{title}</h1>
                     <a
@@ -138,7 +160,7 @@ const CreateTree = () => {
                           className=" h-5 hover:text-slate-50 cursor-pointer hover:scale-110 duration-300"
                         />
                       </TooltipWrap>
-                      <TooltipWrap text={"Lock or Unlock"}>
+                      <TooltipWrap text={lock ? "Locked" : "Lock"}>
                         <span
                           className={` p-1
                         ${lock ? "bg-blue-500 rounded-md" : ""}
@@ -156,8 +178,15 @@ const CreateTree = () => {
                       </TooltipWrap>
                     </div>
                   </div>
-
-                 <LockDialog id={_id} Drawer={Drawer} />
+                  {Drawer == _id && (
+                    <LockDialog
+                      lock={lock}
+                      id={_id}
+                      Drawer={Drawer}
+                      setDrawer={setDrawer}
+                      fetchLinks={fetchLinks}
+                    />
+                  )}
                 </div>
               );
             })
@@ -181,4 +210,4 @@ const CreateTree = () => {
   );
 };
 
-export default CreateTree;
+export let fetchLinks: any;

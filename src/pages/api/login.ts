@@ -31,7 +31,6 @@ export default async function handler(
     res.setHeader("Set-Cookie", serialize("token", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production", 
-      maxAge: 360000, 
       path: "/"
     }));
 

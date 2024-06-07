@@ -21,7 +21,7 @@ const Login = () => {
       if(error){
         console.log(message);
       }else{
-        router.push('/create')
+        router.push('/admin')
       }
     } catch (error) {
       console.log(error);

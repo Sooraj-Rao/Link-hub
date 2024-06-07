@@ -12,38 +12,64 @@ export default async function getLinks(
 ) {
   try {
     await ConnectDb();
+    const { user } = req.query;
 
-    const cookies = cookie.parse(req.headers.cookie || "");
+    if (!user) {
+      const cookies = cookie.parse(req.headers.cookie || "");
 
-    const { error, token, message, data, bad } = await ValidateUser(cookies);
+      const { error, token, message, data, bad } = await ValidateUser(cookies);
 
-    if (error && !token) {
-      return res.json({ error: true, message: message });
-    }
-    if (bad) {
-      return res.json({
-        error: true,
-        message: "UnAuthorized..Please login",
-        bad: true,
-      });
-    }
-
-    const { id } = data;
-
-    const UserData = await User.findById(id);
-
-    const Result = await Promise.all(
-      UserData.linktree.map(async (item) => {
-        const populatedItem = await User.populate(item, {
-          path: "linkData",
-          model: Links,
+      if (error && !token) {
+        return res.json({ error: true, message: message });
+      }
+      if (bad) {
+        return res.json({
+          error: true,
+          message: "UnAuthorized..Please login",
+          bad: true,
         });
-        return populatedItem;
-      })
-    );
-    console.log(Result);
+      }
 
-    return res.json({ error: false, message: "success", links: Result });
+      const { id } = data;
+
+      const UserData = await User.findById(id);
+
+      const Result = await Promise.all(
+        UserData.linktree.map(async (item) => {
+          const populatedItem = await User.populate(item, {
+            path: "linkData",
+            model: Links,
+          });
+          return populatedItem;
+        })
+      );
+      const finalRes = {
+        Result,
+        UserData: {
+          userName: UserData.name,
+          userEmail: UserData.email,
+          links: Result.length,
+        },
+      };
+      return res.json({ error: false, message: "success", links: finalRes });
+    } else {
+      if (user) {
+        const UserData = await User.findOne({ name: user });
+        if (!UserData)
+          return res.json({ error: true, message: "User Doesn't Exist" });
+
+        const Result = await Promise.all(
+          UserData.linktree.map(async (item) => {
+            const populatedItem = await User.populate(item, {
+              path: "linkData",
+              model: Links,
+            });
+            return populatedItem;
+          })
+        );
+        return res.json({ error: false, message: "success", links: Result });
+      }
+    }
   } catch (error) {
     console.log(error);
     return res.json({ error: true, message: "Failed to get links" });
