@@ -2,6 +2,7 @@ import mongoose, { Schema } from "mongoose";
 
 const linkSchema = new Schema(
   {
+    user: { type: Schema.Types.ObjectId, ref: "users" },
     title: {
       type: String,
       required: true,
@@ -11,6 +12,10 @@ const linkSchema = new Schema(
       required: true,
     },
     link: {
+      type: String,
+      required: true,
+    },
+    shortLink: {
       type: String,
       required: true,
     },

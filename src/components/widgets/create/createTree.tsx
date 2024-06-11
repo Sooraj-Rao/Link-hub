@@ -86,14 +86,20 @@ export const CreateTree = () => {
                 {linktreeURL}
               </a>
             </h1>
-            <Button>Copy Linktree URL</Button>
+            <Button
+              onClick={() => {
+                window.navigator.clipboard.writeText(linktreeURL);
+              }}
+            >
+              Copy Linktree URL
+            </Button>
           </div>
         </div>
         <div className=" mt-10 flex justify-between items-center ">
           {!userData ? (
             <>
               <h1 className=" h-10 w-32 DarkLoader rounded-md"></h1>
-              <h1 className=" h-10 w-32 DarkLoader rounded-md"></h1 >
+              <h1 className=" h-10 w-32 DarkLoader rounded-md"></h1>
             </>
           ) : (
             <>
