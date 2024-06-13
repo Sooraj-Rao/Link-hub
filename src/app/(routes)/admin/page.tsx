@@ -20,7 +20,7 @@ const CreatePage = () => {
       >
         <SideBar {...SidebarPops} />
       </div>
-      <div className="mx-10 my-5 w-[calc(100vw-15rem)]">
+      <div className="mx-10 my-5 w-[calc(100vw-150px)]">
         <CreateTree />
       </div>
     </div>

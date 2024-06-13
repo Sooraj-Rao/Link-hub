@@ -24,7 +24,7 @@ const SideBar = (props) => {
   ];
   return (
     <>
-      <TooltipWrap text={!sideBarClose ? "Minimize" : "Maximize"}>
+      <TooltipWrap hide={false} text={!sideBarClose ? "Minimize" : "Maximize"}>
         <button
           onClick={() => setsideBarClose(!sideBarClose)}
           className="group-hover:scale-100 scale-0 duration-300 absolute -right-2 top-0 bg-white  hover:text-blue-500  text-black rounded-full"
@@ -36,6 +36,7 @@ const SideBar = (props) => {
           )}
         </button>
       </TooltipWrap>
+      <div className=" flex flex-col justify-between h-[calc(100vh-150px)]">
       <ul className=" w-full p-3  overflow-hidden ">
         {routes.map((item, i) => {
           return (
@@ -78,6 +79,7 @@ const SideBar = (props) => {
           </span>
           <h1 className={`${sideBarClose ? "hidden" : "block"}`}>SoorajRao</h1>
         </div>
+      </div>
       </div>
     </>
   );

@@ -12,7 +12,31 @@ export default async function getLinks(
 ) {
   try {
     await ConnectDb();
-    const { user } = req.query;
+    const { user, shortLink } = req.query;
+
+    if (shortLink) {
+      const isLink = await Links.findOne({ shortLink });
+
+      if (!isLink)
+        return res.json({
+          noLink: true,
+        });
+
+      const UserData = await User.findById(isLink?.user);
+      if (UserData) {
+        return res.json({
+          error: false,
+          message: "success",
+          user: UserData.name,
+          shortLink,
+        });
+      } else {
+        return res.json({
+          error: true,
+          message: "User not found",
+        });
+      }
+    }
 
     if (!user) {
       const cookies = cookie.parse(req.headers.cookie || "");
@@ -52,23 +76,24 @@ export default async function getLinks(
         },
       };
       return res.json({ error: false, message: "success", links: finalRes });
-    } else {
-      if (user) {
-        const UserData = await User.findOne({ name: user });
-        if (!UserData)
-          return res.json({ error: true, message: "User Doesn't Exist" });
+    } else if (user) {
+      const UserData = await User.findOne({ name: user });
+      if (!UserData)
+        return res.json({
+          message: "User Doesn't Exist",
+          noUser: true,
+        });
 
-        const Result = await Promise.all(
-          UserData.linktree.map(async (item) => {
-            const populatedItem = await User.populate(item, {
-              path: "linkData",
-              model: Links,
-            });
-            return populatedItem;
-          })
-        );
-        return res.json({ error: false, message: "success", links: Result });
-      }
+      const Result = await Promise.all(
+        UserData.linktree.map(async (item) => {
+          const populatedItem = await User.populate(item, {
+            path: "linkData",
+            model: Links,
+          });
+          return populatedItem;
+        })
+      );
+      return res.json({ error: false, message: "success", links: Result });
     }
   } catch (error) {
     console.log(error);

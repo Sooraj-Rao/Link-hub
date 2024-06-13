@@ -1,10 +1,10 @@
+import LinkTreePage from "@/app/(routes)/[username]/page";
 import React from "react";
 
 const TreeMobileView = ({ linkData }) => {
-  
   return (
-    <div className=" h-[400px] w-96 bg-slate-600">
-      <div>
+    <div className=" h-[calc(100vh-150px)] w-96 border">
+      {/* <div>
         {linkData?.length!=0 ? (
           linkData?.map((item, i) => {
             return (
@@ -16,7 +16,8 @@ const TreeMobileView = ({ linkData }) => {
         ) : (
           <h1>No data</h1>
         )}
-      </div>
+      </div> */}
+      <LinkTreePage username="@soorajrao" view={true} />
     </div>
   );
 };

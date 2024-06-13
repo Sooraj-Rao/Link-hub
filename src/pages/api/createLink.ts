@@ -5,6 +5,7 @@ import cookie from "cookie";
 import { t_InputData } from "@/components/widgets/create/addDialog";
 import { ValidateUser } from "../util/validateUser";
 import Links from "@/app/models/link.model";
+import { generateRandomId } from "../util/randomGenerator";
 
 export default async function createLinkHandler(
   req: NextApiRequest,
@@ -36,9 +37,14 @@ export default async function createLinkHandler(
     }
 
     const { id } = data;
-    const newLink = { link, title, description, lock };
-
-    console.log(newLink);
+    const newLink = {
+      user: id,
+      link,
+      title,
+      description,
+      lock,
+      shortLink: generateRandomId(),
+    };
 
     const addNewLink = await Links.create(newLink);
     const newLinkId = { linkData: addNewLink?._id };

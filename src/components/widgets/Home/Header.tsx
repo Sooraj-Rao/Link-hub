@@ -6,7 +6,7 @@ import { ModeToggle } from "@/components/ui/toggle-theme";
 
 const Header = () => {
   return (
-    <div className=" flex justify-between px-4  items-center sm:px-10  py-3  shadow-slate-200 dark:shadow-none border-b-2  poppins-medium ">
+    <div className=" sticky top-0 z-[999] bg-background flex justify-between px-4  items-center sm:px-10  py-3  shadow-slate-200 dark:shadow-none border-b-2   ">
       <Link
         href={"/"}
         className="scroll-m-20  flex items-center gap-x-3  w-full font-bold  pb-2 text-3xl  tracking-tight first:mt-0"

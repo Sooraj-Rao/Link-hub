@@ -3,7 +3,7 @@ import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { LockKeyhole, X } from "lucide-react";
 import { Button } from "../ui/button";
-import { UpdateLink } from "@/app/actions/UpdateLinks";
+import { UpdateLink } from "@/app/actions/UpdateLock";
 import SpinLoader from "@/app/utils/anim/loader";
 import { Switch } from "../ui/switch";
 

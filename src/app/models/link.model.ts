@@ -3,6 +3,11 @@ import mongoose, { Schema } from "mongoose";
 const linkSchema = new Schema(
   {
     user: { type: Schema.Types.ObjectId, ref: "users" },
+    isActive: {
+      type: Boolean,
+      required: true,
+      default: true,
+    },
     title: {
       type: String,
       required: true,
