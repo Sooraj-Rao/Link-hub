@@ -22,10 +22,10 @@ import LockDialog from "@/components/tools/LockDialog";
 import { useZustandStore } from "@/zustand/store";
 import LinkLoader from "@/app/utils/anim/linkLoader";
 import { Input } from "@/components/ui/input";
-import { updateFieldValue } from "@/app/actions/updateLinkData";
+import { updateFieldValue } from "@/app/actions/update-link.action";
 import { useToast } from "@/components/ui/use-toast";
 import { Switch } from "@/components/ui/switch";
-import { isActiveChange } from "@/app/actions/isActiveChange";
+import { isActiveChange } from "@/app/actions/active-change.action";
 
 export const CreateTree = () => {
   const [AddDialogShow, setAddDialogShow] = useState(false);

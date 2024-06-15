@@ -1,30 +1,35 @@
 "use client";
+import SpinLoader from "@/app/utils/anim/loader";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import axios from "axios";
 import Link from "next/link";
-import { redirect, useRouter } from "next/navigation";
-import React, { useRef } from "react";
+import {  useRouter } from "next/navigation";
+import React, {  useState } from "react";
 
 const Login = () => {
-  const mailRef = useRef();
-  const passwordRef = useRef();
-  const router = useRouter()
+  const router = useRouter();
+  const [InputData, setInputData] = useState({
+    email: "",
+    password: "",
+  });
+  const [loader, setloader] = useState(false);
 
   const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
-    const email = mailRef?.current?.value;
-    const password = passwordRef?.current?.value;
+    setloader(true);
     try {
-      const res = await axios.post("/api/login", { email, password });
+      const res = await axios.post("/api/login", InputData);
       const { error, message } = res.data;
-      if(error){
+      if (error) {
         console.log(message);
-      }else{
-        router.push('/admin')
+      } else {
+        router.push("/admin");
       }
     } catch (error) {
       console.log(error);
+    } finally {
+      setloader(false);
     }
   };
 
@@ -46,7 +51,10 @@ const Login = () => {
               <span className="absolute"></span>
 
               <Input
-                ref={mailRef}
+                value={InputData.email}
+                onChange={(e) =>
+                  setInputData({ ...InputData, email: e.target.value })
+                }
                 type="email"
                 placeholder="Email"
                 className="w-80 border-slate-400 dark:border-slate-700"
@@ -57,7 +65,10 @@ const Login = () => {
               <span className="absolute"></span>
 
               <Input
-                ref={passwordRef}
+                value={InputData.password}
+                onChange={(e) =>
+                  setInputData({ ...InputData, password: e.target.value })
+                }
                 type="password"
                 placeholder="Password"
                 className="w-80 border-slate-400 dark:border-slate-700"
@@ -65,7 +76,16 @@ const Login = () => {
             </div>
 
             <div className="mt-6 text-center">
-              <Button className=" ">Login </Button>
+              <Button disabled={loader} className=" ">
+                {!loader ? (
+                  "Login"
+                ) : (
+                  <>
+                    Submitting
+                    <SpinLoader />
+                  </>
+                )}
+              </Button>
 
               <p className="my-4 text-center text-gray-600 dark:text-gray-400">
                 or

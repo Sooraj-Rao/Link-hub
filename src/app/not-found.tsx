@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { ChevronLeft } from "lucide-react";
 import Link from "next/link";
 
-export default function NotFound({ header }) {
+export default function NotFound({ header }: { header: string }) {
   return (
     <div className="  mt-20  flex flex-col items-center">
       <h2 className=" text-5xl my-4">{header ? header : "Page Not Found"}</h2>

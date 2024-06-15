@@ -21,7 +21,7 @@ const LinkTreePage = (props) => {
   const [InvalidUser, setInvalidUser] = useState(false);
   const [DialogShow, setDialogShow] = useState("");
   const [InputKey, setInputKey] = useState("");
-  const [ShareView, setShareView] = useState("");
+  const [ShareView, setShareView] = useState(null);
   const [ShakeAnim, setShakeAnim] = useState(false);
   const { toast } = useToast();
   const user =
@@ -33,7 +33,7 @@ const LinkTreePage = (props) => {
       const res = await axios.get(`/api/getlinks?user=${user}`);
       const { error, message, links, noUser } = res?.data;
 
-      const onlyLinks = links?.map((item) => {
+      const onlyLinks = links?.map((item: any) => {
         return item?.linkData;
       });
       if (noUser) {
@@ -55,7 +55,7 @@ const LinkTreePage = (props) => {
 
   const handleValidate = ({ _id, lock }: { _id: string; lock: string }) => {
     if (InputKey == lock) {
-      const neww = linkData?.map((item, i) => {
+      const neww = linkData?.map((item: any, i: number) => {
         if (item._id == _id) item.lock = "";
         return item;
       });
@@ -77,11 +77,12 @@ const LinkTreePage = (props) => {
 
   useEffect(() => {
     fetchLinks();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props?.username]);
 
   return (
     <>
-      {!props?.view && (
+      {!props?.view && ShareView && (
         <ShareModal setShareView={setShareView} ShareView={ShareView} />
       )}
       <div className={`${InvalidUser ? "block" : "hidden"}`}>
@@ -147,7 +148,7 @@ const LinkTreePage = (props) => {
                   </h1>
                 </div>
 
-                {linkData?.map((item, i) => {
+                {linkData?.map((item: any, i: number) => {
                   const {
                     link,
                     title,
@@ -179,7 +180,7 @@ const LinkTreePage = (props) => {
                           <span className=" capitalize text-blue-100">
                             {user}
                           </span>
-                          <span>hasn't shown any links.</span>
+                          <span>has not shown any links.</span>
                         </div>
                       )}
                       <div

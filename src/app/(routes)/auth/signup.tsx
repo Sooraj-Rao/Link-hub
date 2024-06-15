@@ -1,25 +1,35 @@
 "use client";
-import { Register } from "@/app/actions/useRegister";
+import { Register } from "@/app/actions/register.action";
+import SpinLoader from "@/app/utils/anim/loader";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
-import React, { useRef } from "react";
+import { useRouter } from "next/navigation";
+import React, { useState } from "react";
 
 const Login = () => {
-  const mailRef = useRef();
-  const passwordRef = useRef();
+  const router = useRouter();
+  const [InputData, setInputData] = useState({
+    email: "",
+    password: "",
+  });
+  const [loader, setloader] = useState(false);
 
   const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
-    const email = mailRef?.current?.value;
-    const password = passwordRef?.current?.value;
-
-    const { error, message, data } = await Register({ email, password });
-    if (error) {
-      return console.log(message);
+    setloader(true);
+    try {
+      const { error, message } = await Register(InputData);
+      if (error) {
+        return console.log(message);
+      }
+      console.log(message);
+      router.push("/auth/login");
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setloader(false);
     }
-    console.log(message);
-    console.log(data);
   };
 
   return (
@@ -40,7 +50,10 @@ const Login = () => {
               <span className="absolute"></span>
 
               <Input
-                ref={mailRef}
+                value={InputData.email}
+                onChange={(e) =>
+                  setInputData({ ...InputData, email: e.target.value })
+                }
                 type="email"
                 placeholder="Email"
                 className="w-80 border-slate-400 dark:border-slate-700"
@@ -51,7 +64,10 @@ const Login = () => {
               <span className="absolute"></span>
 
               <Input
-                ref={passwordRef}
+                value={InputData.password}
+                onChange={(e) =>
+                  setInputData({ ...InputData, password: e.target.value })
+                }
                 type="password"
                 placeholder="Password"
                 className="w-80 border-slate-400 dark:border-slate-700"
@@ -59,7 +75,16 @@ const Login = () => {
             </div>
 
             <div className="mt-6 text-center">
-              <Button className=" ">Register </Button>
+              <Button className=" ">
+                {!loader ? (
+                  "Register"
+                ) : (
+                  <>
+                    Submitting
+                    <SpinLoader />
+                  </>
+                )}
+              </Button>
 
               <p className="my-4 text-center text-gray-600 dark:text-gray-400">
                 or

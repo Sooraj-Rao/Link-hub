@@ -1,4 +1,4 @@
-
+"use server";
 import mongoose, { Connection } from "mongoose";
 
 let cachedConnection: Connection | null = null;

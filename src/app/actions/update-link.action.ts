@@ -2,7 +2,15 @@
 
 import Links from "../models/link.model";
 
-export const updateFieldValue = async ({ field, id, value }) => {
+export const updateFieldValue = async ({
+  field,
+  id,
+  value,
+}: {
+  field: string;
+  id: string;
+  value: string;
+}) => {
   try {
     let res;
     switch (field) {

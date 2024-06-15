@@ -1,10 +1,9 @@
 "use client";
 import SideBar from "@/components/widgets/create/sidebar";
-import {CreateTree} from "@/components/widgets/create/createTree";
+import { CreateTree } from "@/components/widgets/create/createTree";
 import React, { useState } from "react";
 
 const CreatePage = () => {
-  const login = true;
   const [sideBarClose, setsideBarClose] = useState(false);
 
   const SidebarPops = {

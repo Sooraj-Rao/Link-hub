@@ -1,10 +1,9 @@
-import Hero from "../components/widgets/Home/Hero";
+import { HomePage } from "@/components/component/home-page";
 
 export default function Page() {
   return (
     <div>
-    
-      <Hero />
+      <HomePage />
     </div>
   );
 }
